@@ -50,5 +50,40 @@ describe("calculatePriceWithDiscount", () => {
         }).toThrow('El precio base debe ser un número positivo');
     });
 
-    it.todo('Debe lanzar un error si el descuento es negativo');
+    it('Debe lanzar un error si el descuento es negativo', () => {
+        const precioBase = 100;
+        const descuento = -10;
+
+        expect(() => {
+            calculatePriceWithDiscount(precioBase, descuento)
+        }).toThrow('El porcentaje de descuento debe estar entre 0 y 100');
+    });
+
+    // Edge cases
+    // Precio es 0
+    it('Debe retornar 0 si el precio base es 0', () => {
+        const precioBase = 0;
+        const descuento = 20;
+
+        const resultado = calculatePriceWithDiscount(precioBase, descuento);
+        expect(resultado).toBe(0);
+    });
+
+    // Precio es NaN
+    it('Debe lanzar una excepcion si el precio es NaN', () => {
+        const precioBase = NaN;
+        const descuento = 20;
+
+        expect( () => {
+            calculatePriceWithDiscount(precioBase, descuento)
+        }).toThrow('El precio base debe ser un número positivo');
+    });
+
+});
+
+describe('calculatePriceWithTax', () => {
+
+    it.todo('Debe calcular el precio con impuestos correctamente para 100 y 21%');
+
+    it.todo('Debe aplicar un 21% como impuesto por defecto');
 });
