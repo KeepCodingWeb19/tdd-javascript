@@ -1,0 +1,46 @@
+<%- include('header.html') %>
+
+<div class="container">
+  <h1>New Agent</h1>
+
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <form method="POST">
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input
+        type="text"
+        name="name"
+        class="form-control"
+        id="name"
+        value="<%= typeof name !== 'undefined' ? name : '' %>"
+        required
+      >
+    </div>
+
+    <div class="mb-3">
+      <label for="age" class="form-label">Age</label>
+      <input 
+        type="number" 
+        name="age" 
+        class="form-control" 
+        id="age"
+        value="<%= typeof age !== 'undefined' ? age : '' %>"
+        min="18"
+        max="130"
+        required
+      >
+      <div class="form-text">La edad debe estar entre 18 y 130 años</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+  </form>
+</div>
+
+<%- include('footer.html') %>
