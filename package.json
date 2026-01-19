@@ -7,7 +7,8 @@
     "dev": "cross-env PORT=3000 NODEAPP_ENV=development nodemon server.js",
     "start": "cross-env NODEAPP_ENV=production node server.js",
     "initDB": "node initDB.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch"
   },
   "keywords": [],
   "author": "",

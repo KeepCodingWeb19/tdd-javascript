@@ -22,6 +22,15 @@ describe("calculatePriceWithDiscount", () => {
         expect(resultado).toBe(100);
     });
 
-    it.todo('Debe retornar 0 con descuento del 100%');
+    it('Debe retornar 0 con descuento del 100%', () => {
+        const precioBase = 100;
+        const descuento = 100;
+        const resultado = calculatePriceWithDiscount(precioBase, descuento);
+
+        expect(resultado).toBe(0);
+        expect(
+            calculatePriceWithDiscount(100, 100)
+        ).toBe(0);
+    });
 
 });
