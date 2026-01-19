@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "cross-env PORT=3000 NODEAPP_ENV=development nodemon server.js",
     "start": "cross-env NODEAPP_ENV=production node server.js",
-    "initDB": "node initDB.js"
+    "initDB": "node initDB.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [],
   "author": "",
@@ -25,11 +26,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "jest": "^30.2.0",
     "nodemon": "^3.1.9"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "jest-extended/all"
-    ]
   }
 }
