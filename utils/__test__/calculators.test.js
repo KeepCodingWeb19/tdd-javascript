@@ -97,16 +97,29 @@ describe('calculatePriceWithTax', () => {
         expect(resultado).toBe(121);
     });
 
-    it.todo('Debe lanzar error si el porcentaje de impuesto es negativo')
+    it('Debe lanzar error si el porcentaje de impuesto es negativo', () => {
+        const precioBase = 100;
+        const impuesto = -10;
+        expect(() => {
+            calculatePriceWithTax(precioBase, impuesto)
+        }).toThrow('El porcentaje de impuesto debe ser un número positivo');
+    })
 });
 
 describe('calculateAverageAge', () => {
 
     // TEST 1: Caso feliz
-    test.todo('debe calcular la edad promedio correctamente');
+    test('debe calcular la edad promedio correctamente', () => {
+        const edades = [10, 20, 30];
+        expect(calculateAverageAge(edades)).toBe(20);
+    });
 
     // TEST 3: EDGE CASE - Array vacío
-    test.todo('debe lanzar error si el array está vacío');
+    test('debe lanzar error si el array está vacío', () => {
+        expect(() => {
+            calculateAverageAge([])
+        }).toThrow('El array de edades no puede estar vacío');
+    });
 
     // EDGE CASE: filtro de valores
     it('Debe filtrar los valoes inválidos y calcular con los válidos', () => {
@@ -116,7 +129,11 @@ describe('calculateAverageAge', () => {
     });
 
     // EDGE CASE - null
-    test.todo('debe lanzar error si se pasa null');
+    test('debe lanzar error si se pasa null', () => {
+        expect(() => {
+            calculateAverageAge(null)
+        }).toThrow('Se espera un array de edades');
+    });
 
 });
 
