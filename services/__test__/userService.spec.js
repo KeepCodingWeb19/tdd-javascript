@@ -7,17 +7,15 @@ jest.mock('../../models/User.js');
 User.findOne = jest.fn();
 User.findById = jest.fn();
 User.hashPassword = jest.fn();
-User.save = jest.fn();
-User.defaut = () => mockInstanceUser;
+// En un modelo, para poder acceder a los métodos estáticos
+// Debemos mockear su prototipo, no los métodos en si.
+User.prototype.save = jest.fn();
 
 const mockInstanceUser = {
-    save: jest.fn(),
+    comparePassword: jest.fn().mockResolvedValue(true),
+    addLoginRecord: jest.fn(),
+    save: jest.fn().mockResolvedValue(true)
 }
-
-jest.mock('../../utils/formatters.js', () => ({
-    formatEmail: mockFormatEmail,
-}));
-const mockFormatEmail = jest.fn();
 
 // jest.mock('../../utils/formatters.js', () => {
 //     return {
@@ -65,7 +63,7 @@ describe('createUser', () => {
 
     });
 
-    test.skip('debe llamar a formatEmail con el email proporcionado', async () => {
+    test('debe llamar a formatEmail con el email proporcionado', async () => {
         const userData = {
             email: ' Test@Ejemplo.cOM',
             password: 'Password1234'
@@ -76,10 +74,10 @@ describe('createUser', () => {
 
         User.findOne.mockResolvedValueOnce(null);
         User.hashPassword.mockResolvedValueOnce(userData.password);
-        mockInstanceUser.save.mockResolvedValueOnce({});
+        User.prototype.save.mockResolvedValueOnce({});
 
         await createUser(userData);
-        expect(mockFormatEmail).toHaveBeenCalled();
+        expect(User.prototype.save).toHaveBeenCalled();
 
         // El resultado es correcto? test@ejemplo.com
     }, 10000); // Timeout de 10s

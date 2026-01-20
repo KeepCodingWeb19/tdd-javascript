@@ -35,12 +35,12 @@ export async function createUser(userData) {
   
   // Hashear la contraseña
   const hashedPassword = await User.hashPassword(password)
-  
+
   // Crear el usuario
   const user = new User({
     email: formattedEmail,
     password: hashedPassword
-  })
+  });
   
   await user.save()
   return user
