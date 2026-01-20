@@ -27,22 +27,22 @@ const mockFormatEmail = jest.fn();
 
 describe('createUser', () => {
 
-    it('Debe lanzar una excepción si el email no es válido', async () => {
+    // Objeto base de usuario
+    const userData = {};
+    beforeEach(() => {
+        userData.email = 'email@example.com';
+        userData.password = 'Password123';
+    })
 
-        const userData = {
-            email: 'email-invalido',
-            password: 'Password123'
-        };
+    it('Debe lanzar una excepción si el email no es válido', async () => {
+        userData.email = 'email-invalido';
 
         expect.assertions(1);
         await expect(createUser(userData)).rejects.toThrow('El email no tiene un formato válido');
     });
 
     it('Debe lanzar error si la contraseña no es válida', async () => {
-        const userData = {
-            email: 'email@example.com',
-            password: '123'
-        };
+        userData.password = '123';
 
         expect.assertions(1);
         await expect(createUser(userData))
@@ -51,11 +51,6 @@ describe('createUser', () => {
 
     // Mocks
     it('Debe lanzar un error si el usuario ya existe', async () => {
-        const userData = {
-            email: 'test@ejemplo.com',
-            password: 'Password1234'
-        };
-
         const existingUser = {
             email: 'existing@ejemplo.com'
         };
@@ -66,7 +61,7 @@ describe('createUser', () => {
         await expect(createUser(userData))
             .rejects.toThrow('Ya existe un usuario con ese email');
         expect(spy).toHaveBeenCalled();
-        expect(spy).toHaveBeenCalledWith({ email: 'test@ejemplo.com' })
+        expect(spy).toHaveBeenCalledWith({ email: 'email@example.com' })
 
     });
 
