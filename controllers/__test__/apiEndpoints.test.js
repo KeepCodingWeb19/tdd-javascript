@@ -244,6 +244,63 @@ describe('API Endpoints - Test de Integración', () => {
             expect(response.body.data.finalPrice).toBe(121);
         });
 
+        // 100, dto: 10, tax: 21 -> N
+        it('Debe aplicar descuento e impuesto en orden correcto', async () => {
+            expect.assertions(3);
+            // ARRANGE
+            const requestData = {
+                basePrice: 100,
+                discountPercent: 10,
+                taxPercent: 21
+            };
+
+            // ACT
+            const response = await request(app)
+                .post(ENDPOINT)
+                .send(requestData) // Con send enviamos cualquier información en el body
+
+            // ASSERT
+            expect(response.body.success).toBe(true);
+            expect(response.body.data.basePrice).toBe(requestData.basePrice);
+            expect(response.body.data.finalPrice).toBe(108.9);
+        });
+
+        it('Debe devolver un error en caso de no recibir basePrice o recibir un valor no numérico', async () => {
+            expect.assertions(3);
+            // ARRANGE
+            const requestData = {
+                basePrice: 'text'
+            };
+
+            // ACT
+            const response = await request(app)
+                .post(ENDPOINT)
+                .send(requestData) // Con send enviamos cualquier información en el body
+
+            // ASSERT
+            expect(response.body.success).toBe(false);
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe('El precio base debe ser un número positivo');
+        })
+
+        it('Debe devolver un error en caso de recibir un valor negativo', async () => {
+            expect.assertions(3);
+            // ARRANGE
+            const requestData = {
+                basePrice: -100
+            };
+
+            // ACT
+            const response = await request(app)
+                .post(ENDPOINT)
+                .send(requestData) // Con send enviamos cualquier información en el body
+
+            // ASSERT
+            expect(response.body.success).toBe(false);
+            expect(response.status).toBe(400);
+            expect(response.body.error).toBe('El precio base debe ser un número positivo');
+        });
+
 
     });
 });
