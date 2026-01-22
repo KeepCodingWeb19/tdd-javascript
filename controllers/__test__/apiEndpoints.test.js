@@ -24,6 +24,11 @@ jest.unstable_mockModule('../../services/agentService.js', () => ({
 }))
 const mockGetAgentStatistics = jest.fn();
 
+jest.unstable_mockModule('../../services/userService.js', () => ({
+    getLoginHistory: mockGetLoginHistory,
+}));
+const mockGetLoginHistory = jest.fn();
+
 // El import de APP siempre justo antes de los tests
 const { default: app } = await import('../../app.js');
 
@@ -117,9 +122,66 @@ describe('API Endpoints - Test de Integración', () => {
 
     });
 
-    // describe('POST /api/calculate/price', () => {
+    describe('GET /api/user/login-history', () => {
+        const ENDPOINT = '/api/user/login-history';
 
+        it('Debe devolver el historial de logins del usuario', async () => {
+            expect.assertions(4)
 
-    // });
+            // ARRANGE
+            const mockHistory = [
+                { ip: '10.77.0.2', timestamp: new Date('2026-01-21') },
+                { ip: '10.77.0.9', timestamp: new Date('2026-01-20') }
+            ];
 
+            mockGetLoginHistory.mockResolvedValue(mockHistory);
+
+            // ACT
+            const response = await request(app).get(ENDPOINT);
+
+            expect(response.body.success).toBe(true);
+            expect(response.body.data).toHaveLength(mockHistory.length);
+            expect(response.body.data[0]).toHaveProperty('ip');
+            expect(response.body.data[0]).toHaveProperty('formattedDate');
+
+        });
+
+        /**
+         * TEST CON QUERY PARAMS:
+         * Testear que el endpoint acepta parámetros de query
+         */
+        it('Debe aceptar el parámetro limit en la query y utilizarlo en el servicio', async () => {
+            expect.assertions(1);
+
+             const mockHistory = [
+                { ip: '10.77.0.2', timestamp: new Date('2026-01-21') },
+                { ip: '10.77.0.9', timestamp: new Date('2026-01-20') }
+            ];
+
+            mockGetLoginHistory.mockResolvedValue(mockHistory);
+
+            // ACT
+            const response = await request(app).get(`${ENDPOINT}?limit=4`);
+
+            expect(mockGetLoginHistory).toHaveBeenCalledWith(1, 4);
+
+        });
+
+        it('Debe usar limit por defecto si no se proporciona', async () => {
+            expect.assertions(1);
+
+             const mockHistory = [
+                { ip: '10.77.0.2', timestamp: new Date('2026-01-21') },
+                { ip: '10.77.0.9', timestamp: new Date('2026-01-20') }
+            ];
+
+            mockGetLoginHistory.mockResolvedValue(mockHistory);
+
+            // ACT
+            const response = await request(app).get(`${ENDPOINT}`);
+
+            expect(mockGetLoginHistory).toHaveBeenCalledWith(1, 10);
+        });
+
+    })
 });
