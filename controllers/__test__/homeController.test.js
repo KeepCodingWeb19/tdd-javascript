@@ -39,5 +39,12 @@ describe('Test de Index', () => {
 
     }, 15000);
 
-    it.todo("Debe devolver siempre un documento html al visitar la home");
+    it("Debe devolver siempre un documento html al visitar la home", async () => {
+        expect.assertions(2);
+
+        const response = await request(app).get('/');
+        expect(response.text).toContain('<!DOCTYPE html>');
+        expect(response.headers['content-type']).toContain('text/html');
+
+    });
 })
