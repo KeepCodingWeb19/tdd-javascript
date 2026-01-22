@@ -31,18 +31,19 @@ const { default: app } = await import('../../app.js');
 
 describe('Test de Index', () => {
 
-    it("Debe devolver un 200 al visitar la home", async () => {
+    let response;
+    beforeAll( async () => {
+        response = await request(app).get('/');
+    });
+
+    it("Debe devolver un 200 al visitar la home", () => {
         expect.assertions(1); 
-
-        const response = await request(app).get('/');
         expect(response.status).toBe(200);
-
     }, 15000);
 
-    it("Debe devolver siempre un documento html al visitar la home", async () => {
+    it("Debe devolver siempre un documento html al visitar la home", () => {
         expect.assertions(2);
 
-        const response = await request(app).get('/');
         expect(response.text).toContain('<!DOCTYPE html>');
         expect(response.headers['content-type']).toContain('text/html');
 
