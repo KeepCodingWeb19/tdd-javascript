@@ -183,5 +183,67 @@ describe('API Endpoints - Test de Integración', () => {
             expect(mockGetLoginHistory).toHaveBeenCalledWith(1, 10);
         });
 
-    })
+    });
+
+    describe('POST /api/calculate/price', () => {
+        const ENDPOINT = '/api/calculate/price';
+
+        it('Debe calcular el precio base sin descuentos ni impuestos', async () => {
+            expect.assertions(3);
+            // ARRANGE
+            const requestData = {
+                basePrice: 100
+            };
+
+            // ACT
+            const response = await request(app)
+                .post(ENDPOINT)
+                .send(requestData) // Con send enviamos cualquier información en el body
+
+            // ASSERT
+            expect(response.body.success).toBe(true);
+            expect(response.body.data.basePrice).toBe(requestData.basePrice);
+            expect(response.body.data.finalPrice).toBe(requestData.basePrice);
+        });
+
+        it('Debe aplicar descuento correctamente', async () => {
+            expect.assertions(3);
+            // ARRANGE
+            const requestData = {
+                basePrice: 100,
+                discountPercent: 10
+            };
+
+            // ACT
+            const response = await request(app)
+                .post(ENDPOINT)
+                .send(requestData) // Con send enviamos cualquier información en el body
+
+            // ASSERT
+            expect(response.body.success).toBe(true);
+            expect(response.body.data.basePrice).toBe(requestData.basePrice);
+            expect(response.body.data.finalPrice).toBe(90);
+        });
+
+        it('Debe aplicar impuesto correctamente', async () => {
+            expect.assertions(3);
+            // ARRANGE
+            const requestData = {
+                basePrice: 100,
+                taxPercent: 21
+            };
+
+            // ACT
+            const response = await request(app)
+                .post(ENDPOINT)
+                .send(requestData) // Con send enviamos cualquier información en el body
+
+            // ASSERT
+            expect(response.body.success).toBe(true);
+            expect(response.body.data.basePrice).toBe(requestData.basePrice);
+            expect(response.body.data.finalPrice).toBe(121);
+        });
+
+
+    });
 });
