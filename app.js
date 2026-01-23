@@ -45,6 +45,7 @@ app.get('/logout', loginController.logout)
 app.get('/agents/new', sessionManager.guard, agentsController.index)
 app.post('/agents/new', sessionManager.guard, agentsController.postNew)
 app.get('/agents/delete/:agentId', sessionManager.guard, agentsController.deleteAgent)
+app.put('/agents/edit/:agentId', sessionManager.guard, agentsController.editAgent)
 // Edit AGENT TDD
 
 // API endpoints

@@ -55,3 +55,24 @@ export async function deleteAgent(req, res, next) {
     next(error)
   }
 }
+
+export async function editAgent(req, res, next) {
+
+  const agentId = req.params.agentId;
+
+  if (!isValidObjectId(agentId)) {
+    return res.status(400).send('Invalid Object ID');
+  }
+
+  const agents = await agentService.getAgentsByOwner(req.session.userId);
+
+  const agent = agents.find( i => i._id.toString() === agentId );
+
+  if (!agent) {
+    return res.status(404).send('Agent not found');
+  }
+
+  const updated = await agentService.updateAgent(agentId, req.session.userId, req.body);
+
+  res.status(200).json(updated);
+}
