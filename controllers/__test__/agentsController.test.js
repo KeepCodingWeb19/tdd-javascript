@@ -4,32 +4,35 @@ import request from 'supertest';
 
 
 
-jest.unstable_mockModule('../../lib/sessionManager.js', () => {
-    return {
-        middleware: (req, res, next) => {
-            req.session = { userId: 1 };
-            // Imprescindible llamar a next() cuando mockeamos middlewares
-            // return res.status(201).json(); 
-            next();
-        },
-        useSessionInViews: (req, res, next) => {
-            res.locals.session = req.session || {};
-            next();
-        },
-        guard: (req, res, next) => next(),
-    }
-});
+// jest.unstable_mockModule('../../lib/sessionManager.js', () => {
+//     return {
+//         middleware: (req, res, next) => {
+//             req.session = { userId: 1 };
+//             // Imprescindible llamar a next() cuando mockeamos middlewares
+//             // return res.status(201).json(); 
+//             next();
+//         },
+//         useSessionInViews: (req, res, next) => {
+//             res.locals.session = req.session || {};
+//             next();
+//         },
+//         guard: (req, res, next) => next(),
+//     }
+// });
+const { mockSessionManager, mockAgentService } = await import('./testingMocks.js');
+mockSessionManager();
+const { mockCreateAgent, mockDeleteAgent, mockGetAgentsByOwner, mockUpdateAgent } = mockAgentService();
 
-jest.unstable_mockModule('../../services/agentService.js', () => ({
-    createAgent: mockCreateAgent,
-    deleteAgent: mockDeleteAgent,
-    getAgentsByOwner: mockGetAgentsByOwner,
-    updateAgent: mockUpdateAgent,
-}));
-const mockCreateAgent = jest.fn();
-const mockDeleteAgent = jest.fn();
-const mockGetAgentsByOwner = jest.fn();
-const mockUpdateAgent = jest.fn();
+// jest.unstable_mockModule('../../services/agentService.js', () => ({
+//     createAgent: mockCreateAgent,
+//     deleteAgent: mockDeleteAgent,
+//     getAgentsByOwner: mockGetAgentsByOwner,
+//     updateAgent: mockUpdateAgent,
+// }));
+// const mockCreateAgent = jest.fn();
+// const mockDeleteAgent = jest.fn();
+// const mockGetAgentsByOwner = jest.fn();
+// const mockUpdateAgent = jest.fn();
 
 // TODO: Mockear Morgan
 jest.unstable_mockModule('morgan', () => ({

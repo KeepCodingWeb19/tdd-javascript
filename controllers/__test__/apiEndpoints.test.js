@@ -3,21 +3,23 @@ import { jest } from '@jest/globals';
 import request from 'supertest';
 
 
-jest.unstable_mockModule('../../lib/sessionManager.js', () => {
-    return {
-        middleware: (req, res, next) => {
-            req.session = { userId: 1 };
-            // Imprescindible llamar a next() cuando mockeamos middlewares
-            // return res.status(201).json(); 
-            next();
-        },
-        useSessionInViews: (req, res, next) => {
-            res.locals.session = req.session || {};
-            next();
-        },
-        guard: (req, res, next) => next(),
-    }
-});
+// jest.unstable_mockModule('../../lib/sessionManager.js', () => {
+//     return {
+//         middleware: (req, res, next) => {
+//             req.session = { userId: 1 };
+//             // Imprescindible llamar a next() cuando mockeamos middlewares
+//             // return res.status(201).json(); 
+//             next();
+//         },
+//         useSessionInViews: (req, res, next) => {
+//             res.locals.session = req.session || {};
+//             next();
+//         },
+//         guard: (req, res, next) => next(),
+//     }
+// });
+const { mockSessionManager } = await import('./testingMocks.js');
+mockSessionManager();
 
 jest.unstable_mockModule('../../services/agentService.js', () => ({
     getAgentStatistics: mockGetAgentStatistics,
